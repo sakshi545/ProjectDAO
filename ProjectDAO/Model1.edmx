@@ -1,0 +1,1123 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Sprint_dbModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Admin">
+          <Key>
+            <PropertyRef Name="AdminID" />
+          </Key>
+          <Property Name="AdminID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Admin_Name" Type="varchar" MaxLength="20" />
+          <Property Name="Address" Type="varchar" MaxLength="20" />
+          <Property Name="Contact" Type="varchar" MaxLength="20" />
+          <Property Name="Status" Type="bit" />
+          <Property Name="DOB" Type="date" />
+          <Property Name="Gender" Type="varchar" MaxLength="10" />
+          <Property Name="Designation" Type="varchar" MaxLength="20" />
+          <Property Name="DOJ" Type="date" />
+          <Property Name="AUsername" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="Apassword" Type="varchar" MaxLength="20" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Attendance">
+          <Key>
+            <PropertyRef Name="AttendanceID" />
+          </Key>
+          <Property Name="EmpID" Type="int" />
+          <Property Name="AttendanceID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ProjectId" Type="int" />
+          <Property Name="CurrDate" Type="date" />
+          <Property Name="Status" Type="bit" />
+        </EntityType>
+        <EntityType Name="AttendanceRequest">
+          <Key>
+            <PropertyRef Name="AttReqID" />
+          </Key>
+          <Property Name="AttReqID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="EmpID" Type="int" Nullable="false" />
+          <Property Name="ReqDate" Type="date" Nullable="false" />
+          <Property Name="isApproved" Type="bit" />
+          <Property Name="ReqStatus" Type="bit" />
+        </EntityType>
+        <EntityType Name="Employee">
+          <Key>
+            <PropertyRef Name="EmpID" />
+          </Key>
+          <Property Name="EmpID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FirstName" Type="varchar" MaxLength="10" />
+          <Property Name="LastName" Type="varchar" MaxLength="10" />
+          <Property Name="Address" Type="varchar" MaxLength="80" />
+          <Property Name="Contact" Type="varchar" MaxLength="20" />
+          <Property Name="Status" Type="bit" />
+          <Property Name="DOB" Type="date" />
+          <Property Name="Gender" Type="varchar" MaxLength="10" />
+          <Property Name="Designation" Type="varchar" MaxLength="20" />
+          <Property Name="DOJ" Type="date" />
+          <Property Name="Alloted_Leaves" Type="int" />
+          <Property Name="AllotedProjectID" Type="int" />
+          <Property Name="Remaining_leaves" Type="int" />
+          <Property Name="EUsername" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="Epassword" Type="varchar" MaxLength="20" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Leaves">
+          <Key>
+            <PropertyRef Name="LeaveID" />
+          </Key>
+          <Property Name="EmpID" Type="int" Nullable="false" />
+          <Property Name="LeaveID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Reason" Type="varchar" MaxLength="100" />
+          <Property Name="IsApproved" Type="bit" />
+          <Property Name="DateFrom" Type="date" />
+          <Property Name="DateTo" Type="date" />
+          <Property Name="status" Type="bit" />
+        </EntityType>
+        <EntityType Name="Project">
+          <Key>
+            <PropertyRef Name="ProjectId" />
+          </Key>
+          <Property Name="ProjectId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Title" Type="varchar" MaxLength="20" />
+          <Property Name="Status" Type="bit" />
+        </EntityType>
+        <Association Name="fk_attendance_EmpID">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="0..1" />
+          <End Role="Attendance" Type="Self.Attendance" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="EmpID" />
+            </Principal>
+            <Dependent Role="Attendance">
+              <PropertyRef Name="EmpID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_attendance_ProjectID">
+          <End Role="Project" Type="Self.Project" Multiplicity="0..1" />
+          <End Role="Attendance" Type="Self.Attendance" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Project">
+              <PropertyRef Name="ProjectId" />
+            </Principal>
+            <Dependent Role="Attendance">
+              <PropertyRef Name="ProjectId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_attendancerequest_EmpID">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="1" />
+          <End Role="AttendanceRequest" Type="Self.AttendanceRequest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="EmpID" />
+            </Principal>
+            <Dependent Role="AttendanceRequest">
+              <PropertyRef Name="EmpID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_employee_AllotedProject">
+          <End Role="Project" Type="Self.Project" Multiplicity="0..1" />
+          <End Role="Employee" Type="Self.Employee" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Project">
+              <PropertyRef Name="ProjectId" />
+            </Principal>
+            <Dependent Role="Employee">
+              <PropertyRef Name="AllotedProjectID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_leaves_EmpID">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="1" />
+          <End Role="Leaves" Type="Self.Leaves" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="EmpID" />
+            </Principal>
+            <Dependent Role="Leaves">
+              <PropertyRef Name="EmpID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="prcEmployeeUpdate" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="EmpID" Type="int" Mode="In" />
+          <Parameter Name="firstName" Type="varchar" Mode="In" />
+          <Parameter Name="lastName" Type="varchar" Mode="In" />
+          <Parameter Name="address" Type="varchar" Mode="In" />
+          <Parameter Name="contact" Type="varchar" Mode="In" />
+          <Parameter Name="status" Type="int" Mode="In" />
+          <Parameter Name="dob" Type="datetime" Mode="In" />
+          <Parameter Name="gender" Type="varchar" Mode="In" />
+          <Parameter Name="designation" Type="varchar" Mode="In" />
+          <Parameter Name="doj" Type="datetime" Mode="In" />
+          <Parameter Name="alloted_leaves" Type="int" Mode="In" />
+          <Parameter Name="Eusername" Type="varchar" Mode="In" />
+          <Parameter Name="Epassword" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="procAddAdmin" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="adminName" Type="varchar" Mode="In" />
+          <Parameter Name="address" Type="varchar" Mode="In" />
+          <Parameter Name="contact" Type="varchar" Mode="In" />
+          <Parameter Name="dob" Type="date" Mode="In" />
+          <Parameter Name="gender" Type="varchar" Mode="In" />
+          <Parameter Name="designation" Type="varchar" Mode="In" />
+          <Parameter Name="doj" Type="date" Mode="In" />
+          <Parameter Name="AUserName" Type="varchar" Mode="In" />
+          <Parameter Name="APassword" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="procAddAttendance" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="empId" Type="int" Mode="In" />
+          <Parameter Name="projectId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="procAddEmployee" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="firstName" Type="varchar" Mode="In" />
+          <Parameter Name="lastName" Type="varchar" Mode="In" />
+          <Parameter Name="address" Type="varchar" Mode="In" />
+          <Parameter Name="contact" Type="varchar" Mode="In" />
+          <Parameter Name="dob" Type="date" Mode="In" />
+          <Parameter Name="gender" Type="varchar" Mode="In" />
+          <Parameter Name="designation" Type="varchar" Mode="In" />
+          <Parameter Name="doj" Type="date" Mode="In" />
+          <Parameter Name="allLeaves" Type="int" Mode="In" />
+          <Parameter Name="eUsername" Type="varchar" Mode="In" />
+          <Parameter Name="password" Type="varchar" Mode="In" />
+          <Parameter Name="allotedProjectId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="procAddLeave" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="empid" Type="int" Mode="In" />
+          <Parameter Name="reason" Type="varchar" Mode="In" />
+          <Parameter Name="dateTo" Type="datetime" Mode="In" />
+          <Parameter Name="dateFrom" Type="datetime" Mode="In" />
+        </Function>
+        <Function Name="procAddProject" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="title" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="procAllReadLeave" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="procApproveAttendanceRequest" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="attReqId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="procApproveLeave" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="leaveId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="procAssignProject" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="EmpId" Type="int" Mode="In" />
+          <Parameter Name="ProjectId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="procDeleteAdmin" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="adminid" Type="int" Mode="In" />
+        </Function>
+        <Function Name="procDeleteAttendanceRequest" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="reqId" Type="int" Mode="In" />
+          <Parameter Name="empid" Type="int" Mode="In" />
+        </Function>
+        <Function Name="procDeleteAttendence" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="empId" Type="int" Mode="In" />
+          <Parameter Name="projectId" Type="int" Mode="In" />
+          <Parameter Name="date" Type="date" Mode="In" />
+        </Function>
+        <Function Name="procDeleteEmployee" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="EmpId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="procDeleteProject" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ProjectID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="procGenerateAttendanceRequest" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="empId" Type="int" Mode="In" />
+          <Parameter Name="date" Type="date" Mode="In" />
+        </Function>
+        <Function Name="procLoginAdmin" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="username" Type="varchar" Mode="In" />
+          <Parameter Name="password" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="procLoginEmployee" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="username" Type="varchar" Mode="In" />
+          <Parameter Name="password" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="procReadAdminById" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="adminId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="procReadAllAdmin" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="procReadAllProject" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="procReadLeave" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="leaveId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="procReadProject" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ProjectID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="procRejectAttendanceRequest" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="attReqId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="procRejectLeave" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="leaveId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="procRetriveAllEmployee" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="procRetriveEmployee" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="EmpId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="procShowPendingRequest" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="procUpdateAdminById" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="adminId" Type="int" Mode="In" />
+          <Parameter Name="adminName" Type="varchar" Mode="In" />
+          <Parameter Name="address" Type="varchar" Mode="In" />
+          <Parameter Name="contact" Type="varchar" Mode="In" />
+          <Parameter Name="dob" Type="date" Mode="In" />
+          <Parameter Name="gender" Type="varchar" Mode="In" />
+          <Parameter Name="designation" Type="varchar" Mode="In" />
+          <Parameter Name="doj" Type="date" Mode="In" />
+          <Parameter Name="AUserName" Type="varchar" Mode="In" />
+          <Parameter Name="APassword" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="procUpdateAttendance" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="empId" Type="int" Mode="In" />
+          <Parameter Name="projectId" Type="int" Mode="In" />
+          <Parameter Name="date" Type="date" Mode="In" />
+          <Parameter Name="status" Type="int" Mode="In" />
+        </Function>
+        <Function Name="procUpdateAttendanceRequest" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="reqId" Type="int" Mode="In" />
+          <Parameter Name="empid" Type="int" Mode="In" />
+          <Parameter Name="newDate" Type="date" Mode="In" />
+        </Function>
+        <Function Name="procUpdateLeave" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="leaveId" Type="int" Mode="In" />
+          <Parameter Name="status" Type="bit" Mode="In" />
+        </Function>
+        <Function Name="procupdateProject" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ProjectID" Type="int" Mode="In" />
+          <Parameter Name="title" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="procViewPendingLeaveRequests" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <EntityContainer Name="Sprint_dbModelStoreContainer">
+          <EntitySet Name="Admin" EntityType="Self.Admin" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Attendance" EntityType="Self.Attendance" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AttendanceRequest" EntityType="Self.AttendanceRequest" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Employee" EntityType="Self.Employee" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Leaves" EntityType="Self.Leaves" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Project" EntityType="Self.Project" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="fk_attendance_EmpID" Association="Self.fk_attendance_EmpID">
+            <End Role="Employee" EntitySet="Employee" />
+            <End Role="Attendance" EntitySet="Attendance" />
+          </AssociationSet>
+          <AssociationSet Name="fk_attendance_ProjectID" Association="Self.fk_attendance_ProjectID">
+            <End Role="Project" EntitySet="Project" />
+            <End Role="Attendance" EntitySet="Attendance" />
+          </AssociationSet>
+          <AssociationSet Name="fk_attendancerequest_EmpID" Association="Self.fk_attendancerequest_EmpID">
+            <End Role="Employee" EntitySet="Employee" />
+            <End Role="AttendanceRequest" EntitySet="AttendanceRequest" />
+          </AssociationSet>
+          <AssociationSet Name="fk_employee_AllotedProject" Association="Self.fk_employee_AllotedProject">
+            <End Role="Project" EntitySet="Project" />
+            <End Role="Employee" EntitySet="Employee" />
+          </AssociationSet>
+          <AssociationSet Name="fk_leaves_EmpID" Association="Self.fk_leaves_EmpID">
+            <End Role="Employee" EntitySet="Employee" />
+            <End Role="Leaves" EntitySet="Leaves" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Sprint_dbModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Admin">
+          <Key>
+            <PropertyRef Name="AdminID" />
+          </Key>
+          <Property Name="AdminID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Admin_Name" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Address" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Contact" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Status" Type="Boolean" />
+          <Property Name="DOB" Type="DateTime" Precision="0" />
+          <Property Name="Gender" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Designation" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="DOJ" Type="DateTime" Precision="0" />
+          <Property Name="AUsername" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Apassword" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Attendance">
+          <Key>
+            <PropertyRef Name="AttendanceID" />
+          </Key>
+          <Property Name="EmpID" Type="Int32" />
+          <Property Name="AttendanceID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProjectId" Type="Int32" />
+          <Property Name="CurrDate" Type="DateTime" Precision="0" />
+          <Property Name="Status" Type="Boolean" />
+          <NavigationProperty Name="Employee" Relationship="Self.fk_attendance_EmpID" FromRole="Attendance" ToRole="Employee" />
+          <NavigationProperty Name="Project" Relationship="Self.fk_attendance_ProjectID" FromRole="Attendance" ToRole="Project" />
+        </EntityType>
+        <EntityType Name="AttendanceRequest">
+          <Key>
+            <PropertyRef Name="AttReqID" />
+          </Key>
+          <Property Name="AttReqID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EmpID" Type="Int32" Nullable="false" />
+          <Property Name="ReqDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="isApproved" Type="Boolean" />
+          <Property Name="ReqStatus" Type="Boolean" />
+          <NavigationProperty Name="Employee" Relationship="Self.fk_attendancerequest_EmpID" FromRole="AttendanceRequest" ToRole="Employee" />
+        </EntityType>
+        <EntityType Name="Employee">
+          <Key>
+            <PropertyRef Name="EmpID" />
+          </Key>
+          <Property Name="EmpID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FirstName" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="LastName" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Address" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
+          <Property Name="Contact" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Status" Type="Boolean" />
+          <Property Name="DOB" Type="DateTime" Precision="0" />
+          <Property Name="Gender" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Designation" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="DOJ" Type="DateTime" Precision="0" />
+          <Property Name="Alloted_Leaves" Type="Int32" />
+          <Property Name="AllotedProjectID" Type="Int32" />
+          <Property Name="Remaining_leaves" Type="Int32" />
+          <Property Name="EUsername" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Epassword" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Attendances" Relationship="Self.fk_attendance_EmpID" FromRole="Employee" ToRole="Attendance" />
+          <NavigationProperty Name="AttendanceRequests" Relationship="Self.fk_attendancerequest_EmpID" FromRole="Employee" ToRole="AttendanceRequest" />
+          <NavigationProperty Name="Project" Relationship="Self.fk_employee_AllotedProject" FromRole="Employee" ToRole="Project" />
+          <NavigationProperty Name="Leaves" Relationship="Self.fk_leaves_EmpID" FromRole="Employee" ToRole="Leaves" />
+        </EntityType>
+        <EntityType Name="Leaf">
+          <Key>
+            <PropertyRef Name="LeaveID" />
+          </Key>
+          <Property Name="EmpID" Type="Int32" Nullable="false" />
+          <Property Name="LeaveID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Reason" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="IsApproved" Type="Boolean" />
+          <Property Name="DateFrom" Type="DateTime" Precision="0" />
+          <Property Name="DateTo" Type="DateTime" Precision="0" />
+          <Property Name="status" Type="Boolean" />
+          <NavigationProperty Name="Employee" Relationship="Self.fk_leaves_EmpID" FromRole="Leaves" ToRole="Employee" />
+        </EntityType>
+        <EntityType Name="Project">
+          <Key>
+            <PropertyRef Name="ProjectId" />
+          </Key>
+          <Property Name="ProjectId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Status" Type="Boolean" />
+          <NavigationProperty Name="Attendances" Relationship="Self.fk_attendance_ProjectID" FromRole="Project" ToRole="Attendance" />
+          <NavigationProperty Name="Employees" Relationship="Self.fk_employee_AllotedProject" FromRole="Project" ToRole="Employee" />
+        </EntityType>
+        <Association Name="fk_attendance_EmpID">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="0..1" />
+          <End Role="Attendance" Type="Self.Attendance" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="EmpID" />
+            </Principal>
+            <Dependent Role="Attendance">
+              <PropertyRef Name="EmpID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_attendance_ProjectID">
+          <End Role="Project" Type="Self.Project" Multiplicity="0..1" />
+          <End Role="Attendance" Type="Self.Attendance" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Project">
+              <PropertyRef Name="ProjectId" />
+            </Principal>
+            <Dependent Role="Attendance">
+              <PropertyRef Name="ProjectId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_attendancerequest_EmpID">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="1" />
+          <End Role="AttendanceRequest" Type="Self.AttendanceRequest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="EmpID" />
+            </Principal>
+            <Dependent Role="AttendanceRequest">
+              <PropertyRef Name="EmpID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_employee_AllotedProject">
+          <End Role="Project" Type="Self.Project" Multiplicity="0..1" />
+          <End Role="Employee" Type="Self.Employee" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Project">
+              <PropertyRef Name="ProjectId" />
+            </Principal>
+            <Dependent Role="Employee">
+              <PropertyRef Name="AllotedProjectID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_leaves_EmpID">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="1" />
+          <End Role="Leaves" Type="Self.Leaf" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="EmpID" />
+            </Principal>
+            <Dependent Role="Leaves">
+              <PropertyRef Name="EmpID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Sprint_dbEntities1" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Admins" EntityType="Self.Admin" />
+          <EntitySet Name="Attendances" EntityType="Self.Attendance" />
+          <EntitySet Name="AttendanceRequests" EntityType="Self.AttendanceRequest" />
+          <EntitySet Name="Employees" EntityType="Self.Employee" />
+          <EntitySet Name="Leaves" EntityType="Self.Leaf" />
+          <EntitySet Name="Projects" EntityType="Self.Project" />
+          <AssociationSet Name="fk_attendance_EmpID" Association="Self.fk_attendance_EmpID">
+            <End Role="Employee" EntitySet="Employees" />
+            <End Role="Attendance" EntitySet="Attendances" />
+          </AssociationSet>
+          <AssociationSet Name="fk_attendance_ProjectID" Association="Self.fk_attendance_ProjectID">
+            <End Role="Project" EntitySet="Projects" />
+            <End Role="Attendance" EntitySet="Attendances" />
+          </AssociationSet>
+          <AssociationSet Name="fk_attendancerequest_EmpID" Association="Self.fk_attendancerequest_EmpID">
+            <End Role="Employee" EntitySet="Employees" />
+            <End Role="AttendanceRequest" EntitySet="AttendanceRequests" />
+          </AssociationSet>
+          <AssociationSet Name="fk_employee_AllotedProject" Association="Self.fk_employee_AllotedProject">
+            <End Role="Project" EntitySet="Projects" />
+            <End Role="Employee" EntitySet="Employees" />
+          </AssociationSet>
+          <AssociationSet Name="fk_leaves_EmpID" Association="Self.fk_leaves_EmpID">
+            <End Role="Employee" EntitySet="Employees" />
+            <End Role="Leaves" EntitySet="Leaves" />
+          </AssociationSet>
+          <FunctionImport Name="prcEmployeeUpdate">
+            <Parameter Name="EmpID" Mode="In" Type="Int32" />
+            <Parameter Name="firstName" Mode="In" Type="String" />
+            <Parameter Name="lastName" Mode="In" Type="String" />
+            <Parameter Name="address" Mode="In" Type="String" />
+            <Parameter Name="contact" Mode="In" Type="String" />
+            <Parameter Name="status" Mode="In" Type="Int32" />
+            <Parameter Name="dob" Mode="In" Type="DateTime" />
+            <Parameter Name="gender" Mode="In" Type="String" />
+            <Parameter Name="designation" Mode="In" Type="String" />
+            <Parameter Name="doj" Mode="In" Type="DateTime" />
+            <Parameter Name="alloted_leaves" Mode="In" Type="Int32" />
+            <Parameter Name="Eusername" Mode="In" Type="String" />
+            <Parameter Name="Epassword" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="procAddAdmin">
+            <Parameter Name="adminName" Mode="In" Type="String" />
+            <Parameter Name="address" Mode="In" Type="String" />
+            <Parameter Name="contact" Mode="In" Type="String" />
+            <Parameter Name="dob" Mode="In" Type="DateTime" />
+            <Parameter Name="gender" Mode="In" Type="String" />
+            <Parameter Name="designation" Mode="In" Type="String" />
+            <Parameter Name="doj" Mode="In" Type="DateTime" />
+            <Parameter Name="AUserName" Mode="In" Type="String" />
+            <Parameter Name="APassword" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="procAddAttendance">
+            <Parameter Name="empId" Mode="In" Type="Int32" />
+            <Parameter Name="projectId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="procAddEmployee">
+            <Parameter Name="firstName" Mode="In" Type="String" />
+            <Parameter Name="lastName" Mode="In" Type="String" />
+            <Parameter Name="address" Mode="In" Type="String" />
+            <Parameter Name="contact" Mode="In" Type="String" />
+            <Parameter Name="dob" Mode="In" Type="DateTime" />
+            <Parameter Name="gender" Mode="In" Type="String" />
+            <Parameter Name="designation" Mode="In" Type="String" />
+            <Parameter Name="doj" Mode="In" Type="DateTime" />
+            <Parameter Name="allLeaves" Mode="In" Type="Int32" />
+            <Parameter Name="eUsername" Mode="In" Type="String" />
+            <Parameter Name="password" Mode="In" Type="String" />
+            <Parameter Name="allotedProjectId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="procAddLeave">
+            <Parameter Name="empid" Mode="In" Type="Int32" />
+            <Parameter Name="reason" Mode="In" Type="String" />
+            <Parameter Name="dateTo" Mode="In" Type="DateTime" />
+            <Parameter Name="dateFrom" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="procAddProject">
+            <Parameter Name="title" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="procAllReadLeave" ReturnType="Collection(Sprint_dbModel.procAllReadLeave_Result)" />
+          <FunctionImport Name="procApproveAttendanceRequest">
+            <Parameter Name="attReqId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="procApproveLeave">
+            <Parameter Name="leaveId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="procAssignProject">
+            <Parameter Name="EmpId" Mode="In" Type="Int32" />
+            <Parameter Name="ProjectId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="procDeleteAdmin">
+            <Parameter Name="adminid" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="procDeleteAttendanceRequest">
+            <Parameter Name="reqId" Mode="In" Type="Int32" />
+            <Parameter Name="empid" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="procDeleteAttendence">
+            <Parameter Name="empId" Mode="In" Type="Int32" />
+            <Parameter Name="projectId" Mode="In" Type="Int32" />
+            <Parameter Name="date" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="procDeleteEmployee">
+            <Parameter Name="EmpId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="procDeleteProject">
+            <Parameter Name="ProjectID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="procGenerateAttendanceRequest">
+            <Parameter Name="empId" Mode="In" Type="Int32" />
+            <Parameter Name="date" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="procLoginAdmin" ReturnType="Collection(Sprint_dbModel.procLoginAdmin_Result)">
+            <Parameter Name="username" Mode="In" Type="String" />
+            <Parameter Name="password" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="procLoginEmployee" ReturnType="Collection(Sprint_dbModel.procLoginEmployee_Result)">
+            <Parameter Name="username" Mode="In" Type="String" />
+            <Parameter Name="password" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="procReadAdminById" ReturnType="Collection(Sprint_dbModel.procReadAdminById_Result)">
+            <Parameter Name="adminId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="procReadAllAdmin" ReturnType="Collection(Sprint_dbModel.procReadAllAdmin_Result)" />
+          <FunctionImport Name="procReadAllProject" ReturnType="Collection(Sprint_dbModel.procReadAllProject_Result)" />
+          <FunctionImport Name="procReadLeave" ReturnType="Collection(Sprint_dbModel.procReadLeave_Result)">
+            <Parameter Name="leaveId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="procReadProject" ReturnType="Collection(Sprint_dbModel.procReadProject_Result)">
+            <Parameter Name="ProjectID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="procRejectAttendanceRequest">
+            <Parameter Name="attReqId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="procRejectLeave">
+            <Parameter Name="leaveId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="procRetriveAllEmployee" ReturnType="Collection(Sprint_dbModel.procRetriveAllEmployee_Result)" />
+          <FunctionImport Name="procRetriveEmployee" ReturnType="Collection(Sprint_dbModel.procRetriveEmployee_Result)">
+            <Parameter Name="EmpId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="procShowPendingRequest" ReturnType="Collection(Sprint_dbModel.procShowPendingRequest_Result)" />
+          <FunctionImport Name="procUpdateAdminById">
+            <Parameter Name="adminId" Mode="In" Type="Int32" />
+            <Parameter Name="adminName" Mode="In" Type="String" />
+            <Parameter Name="address" Mode="In" Type="String" />
+            <Parameter Name="contact" Mode="In" Type="String" />
+            <Parameter Name="dob" Mode="In" Type="DateTime" />
+            <Parameter Name="gender" Mode="In" Type="String" />
+            <Parameter Name="designation" Mode="In" Type="String" />
+            <Parameter Name="doj" Mode="In" Type="DateTime" />
+            <Parameter Name="AUserName" Mode="In" Type="String" />
+            <Parameter Name="APassword" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="procUpdateAttendance">
+            <Parameter Name="empId" Mode="In" Type="Int32" />
+            <Parameter Name="projectId" Mode="In" Type="Int32" />
+            <Parameter Name="date" Mode="In" Type="DateTime" />
+            <Parameter Name="status" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="procUpdateAttendanceRequest">
+            <Parameter Name="reqId" Mode="In" Type="Int32" />
+            <Parameter Name="empid" Mode="In" Type="Int32" />
+            <Parameter Name="newDate" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="procUpdateLeave">
+            <Parameter Name="leaveId" Mode="In" Type="Int32" />
+            <Parameter Name="status" Mode="In" Type="Boolean" />
+          </FunctionImport>
+          <FunctionImport Name="procupdateProject">
+            <Parameter Name="ProjectID" Mode="In" Type="Int32" />
+            <Parameter Name="title" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="procViewPendingLeaveRequests" ReturnType="Collection(Sprint_dbModel.procViewPendingLeaveRequests_Result)" />
+          <FunctionImport Name="procupdateProject1" EntitySet="Projects" ReturnType="Collection(Sprint_dbModel.Project)">
+            <Parameter Name="ProjectID" Mode="In" Type="Int32" />
+            <Parameter Name="title" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="procReadProject1" EntitySet="Projects" ReturnType="Collection(Sprint_dbModel.Project)">
+            <Parameter Name="ProjectID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="procReadAllProject1" EntitySet="Projects" ReturnType="Collection(Sprint_dbModel.Project)" />
+          <FunctionImport Name="procDeleteProject1" EntitySet="Projects" ReturnType="Collection(Sprint_dbModel.Project)">
+            <Parameter Name="ProjectID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="procAddProject1" EntitySet="Projects" ReturnType="Collection(Sprint_dbModel.Project)">
+            <Parameter Name="title" Mode="In" Type="String" />
+          </FunctionImport>
+        </EntityContainer>
+        <ComplexType Name="procAllReadLeave_Result">
+          <Property Type="Int32" Name="EmpID" Nullable="false" />
+          <Property Type="Int32" Name="LeaveID" Nullable="false" />
+          <Property Type="String" Name="Reason" Nullable="true" MaxLength="100" />
+          <Property Type="Boolean" Name="IsApproved" Nullable="true" />
+          <Property Type="DateTime" Name="DateFrom" Nullable="true" />
+          <Property Type="DateTime" Name="DateTo" Nullable="true" />
+          <Property Type="Boolean" Name="status" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="procLoginAdmin_Result">
+          <Property Type="Int32" Name="AdminID" Nullable="false" />
+          <Property Type="String" Name="Admin_Name" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="Address" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="Contact" Nullable="true" MaxLength="20" />
+          <Property Type="Boolean" Name="Status" Nullable="true" />
+          <Property Type="DateTime" Name="DOB" Nullable="true" />
+          <Property Type="String" Name="Gender" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Designation" Nullable="true" MaxLength="20" />
+          <Property Type="DateTime" Name="DOJ" Nullable="true" />
+          <Property Type="String" Name="AUsername" Nullable="false" MaxLength="20" />
+          <Property Type="String" Name="Apassword" Nullable="false" MaxLength="20" />
+        </ComplexType>
+        <ComplexType Name="procLoginEmployee_Result">
+          <Property Type="Int32" Name="EmpID" Nullable="false" />
+          <Property Type="String" Name="FirstName" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="LastName" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Address" Nullable="true" MaxLength="80" />
+          <Property Type="String" Name="Contact" Nullable="true" MaxLength="20" />
+          <Property Type="Boolean" Name="Status" Nullable="true" />
+          <Property Type="DateTime" Name="DOB" Nullable="true" />
+          <Property Type="String" Name="Gender" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Designation" Nullable="true" MaxLength="20" />
+          <Property Type="DateTime" Name="DOJ" Nullable="true" />
+          <Property Type="Int32" Name="Alloted_Leaves" Nullable="true" />
+          <Property Type="Int32" Name="AllotedProjectID" Nullable="true" />
+          <Property Type="Int32" Name="Remaining_leaves" Nullable="true" />
+          <Property Type="String" Name="EUsername" Nullable="false" MaxLength="20" />
+          <Property Type="String" Name="Epassword" Nullable="false" MaxLength="20" />
+        </ComplexType>
+        <ComplexType Name="procReadAdminById_Result">
+          <Property Type="Int32" Name="AdminID" Nullable="false" />
+          <Property Type="String" Name="Admin_Name" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="Address" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="Contact" Nullable="true" MaxLength="20" />
+          <Property Type="Boolean" Name="Status" Nullable="true" />
+          <Property Type="DateTime" Name="DOB" Nullable="true" />
+          <Property Type="String" Name="Gender" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Designation" Nullable="true" MaxLength="20" />
+          <Property Type="DateTime" Name="DOJ" Nullable="true" />
+          <Property Type="String" Name="AUsername" Nullable="false" MaxLength="20" />
+          <Property Type="String" Name="Apassword" Nullable="false" MaxLength="20" />
+        </ComplexType>
+        <ComplexType Name="procReadAllAdmin_Result">
+          <Property Type="Int32" Name="AdminID" Nullable="false" />
+          <Property Type="String" Name="Admin_Name" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="Address" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="Contact" Nullable="true" MaxLength="20" />
+          <Property Type="Boolean" Name="Status" Nullable="true" />
+          <Property Type="DateTime" Name="DOB" Nullable="true" />
+          <Property Type="String" Name="Gender" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Designation" Nullable="true" MaxLength="20" />
+          <Property Type="DateTime" Name="DOJ" Nullable="true" />
+          <Property Type="String" Name="AUsername" Nullable="false" MaxLength="20" />
+          <Property Type="String" Name="Apassword" Nullable="false" MaxLength="20" />
+        </ComplexType>
+        <ComplexType Name="procReadAllProject_Result">
+          <Property Type="Int32" Name="ProjectId" Nullable="false" />
+          <Property Type="String" Name="Title" Nullable="true" MaxLength="20" />
+          <Property Type="Boolean" Name="Status" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="procReadLeave_Result">
+          <Property Type="Int32" Name="EmpID" Nullable="false" />
+          <Property Type="Int32" Name="LeaveID" Nullable="false" />
+          <Property Type="String" Name="Reason" Nullable="true" MaxLength="100" />
+          <Property Type="Boolean" Name="IsApproved" Nullable="true" />
+          <Property Type="DateTime" Name="DateFrom" Nullable="true" />
+          <Property Type="DateTime" Name="DateTo" Nullable="true" />
+          <Property Type="Boolean" Name="status" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="procReadProject_Result">
+          <Property Type="Int32" Name="ProjectId" Nullable="false" />
+          <Property Type="String" Name="Title" Nullable="true" MaxLength="20" />
+          <Property Type="Boolean" Name="Status" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="procRetriveAllEmployee_Result">
+          <Property Type="Int32" Name="EmpID" Nullable="false" />
+          <Property Type="String" Name="FirstName" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="LastName" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Address" Nullable="true" MaxLength="80" />
+          <Property Type="String" Name="Contact" Nullable="true" MaxLength="20" />
+          <Property Type="Boolean" Name="Status" Nullable="true" />
+          <Property Type="DateTime" Name="DOB" Nullable="true" />
+          <Property Type="String" Name="Gender" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Designation" Nullable="true" MaxLength="20" />
+          <Property Type="DateTime" Name="DOJ" Nullable="true" />
+          <Property Type="Int32" Name="Alloted_Leaves" Nullable="true" />
+          <Property Type="Int32" Name="AllotedProjectID" Nullable="true" />
+          <Property Type="Int32" Name="Remaining_leaves" Nullable="true" />
+          <Property Type="String" Name="EUsername" Nullable="false" MaxLength="20" />
+          <Property Type="String" Name="Epassword" Nullable="false" MaxLength="20" />
+        </ComplexType>
+        <ComplexType Name="procRetriveEmployee_Result">
+          <Property Type="Int32" Name="EmpID" Nullable="false" />
+          <Property Type="String" Name="FirstName" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="LastName" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Address" Nullable="true" MaxLength="80" />
+          <Property Type="String" Name="Contact" Nullable="true" MaxLength="20" />
+          <Property Type="Boolean" Name="Status" Nullable="true" />
+          <Property Type="DateTime" Name="DOB" Nullable="true" />
+          <Property Type="String" Name="Gender" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Designation" Nullable="true" MaxLength="20" />
+          <Property Type="DateTime" Name="DOJ" Nullable="true" />
+          <Property Type="Int32" Name="Alloted_Leaves" Nullable="true" />
+          <Property Type="Int32" Name="AllotedProjectID" Nullable="true" />
+          <Property Type="Int32" Name="Remaining_leaves" Nullable="true" />
+          <Property Type="String" Name="EUsername" Nullable="false" MaxLength="20" />
+          <Property Type="String" Name="Epassword" Nullable="false" MaxLength="20" />
+        </ComplexType>
+        <ComplexType Name="procShowPendingRequest_Result">
+          <Property Type="Int32" Name="AttReqID" Nullable="false" />
+          <Property Type="Int32" Name="EmpID" Nullable="false" />
+          <Property Type="DateTime" Name="ReqDate" Nullable="false" />
+          <Property Type="Boolean" Name="isApproved" Nullable="true" />
+          <Property Type="Boolean" Name="ReqStatus" Nullable="true" />
+          <Property Type="String" Name="FirstName" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="LastName" Nullable="true" MaxLength="10" />
+        </ComplexType>
+        <ComplexType Name="procViewPendingLeaveRequests_Result">
+          <Property Type="Int32" Name="LeaveID" Nullable="false" />
+          <Property Type="DateTime" Name="DateFrom" Nullable="true" />
+          <Property Type="DateTime" Name="DateTo" Nullable="true" />
+          <Property Type="Boolean" Name="status" Nullable="true" />
+          <Property Type="Boolean" Name="IsApproved" Nullable="true" />
+          <Property Type="String" Name="FirstName" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="LastName" Nullable="true" MaxLength="10" />
+          <Property Type="Int32" Name="Remaining_leaves" Nullable="true" />
+          <Property Type="Int32" Name="Alloted_Leaves" Nullable="true" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Sprint_dbModelStoreContainer" CdmEntityContainer="Sprint_dbEntities1">
+          <EntitySetMapping Name="Admins">
+            <EntityTypeMapping TypeName="Sprint_dbModel.Admin">
+              <MappingFragment StoreEntitySet="Admin">
+                <ScalarProperty Name="AdminID" ColumnName="AdminID" />
+                <ScalarProperty Name="Admin_Name" ColumnName="Admin_Name" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Contact" ColumnName="Contact" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="DOB" ColumnName="DOB" />
+                <ScalarProperty Name="Gender" ColumnName="Gender" />
+                <ScalarProperty Name="Designation" ColumnName="Designation" />
+                <ScalarProperty Name="DOJ" ColumnName="DOJ" />
+                <ScalarProperty Name="AUsername" ColumnName="AUsername" />
+                <ScalarProperty Name="Apassword" ColumnName="Apassword" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Attendances">
+            <EntityTypeMapping TypeName="Sprint_dbModel.Attendance">
+              <MappingFragment StoreEntitySet="Attendance">
+                <ScalarProperty Name="EmpID" ColumnName="EmpID" />
+                <ScalarProperty Name="AttendanceID" ColumnName="AttendanceID" />
+                <ScalarProperty Name="ProjectId" ColumnName="ProjectId" />
+                <ScalarProperty Name="CurrDate" ColumnName="CurrDate" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AttendanceRequests">
+            <EntityTypeMapping TypeName="Sprint_dbModel.AttendanceRequest">
+              <MappingFragment StoreEntitySet="AttendanceRequest">
+                <ScalarProperty Name="AttReqID" ColumnName="AttReqID" />
+                <ScalarProperty Name="EmpID" ColumnName="EmpID" />
+                <ScalarProperty Name="ReqDate" ColumnName="ReqDate" />
+                <ScalarProperty Name="isApproved" ColumnName="isApproved" />
+                <ScalarProperty Name="ReqStatus" ColumnName="ReqStatus" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Employees">
+            <EntityTypeMapping TypeName="Sprint_dbModel.Employee">
+              <MappingFragment StoreEntitySet="Employee">
+                <ScalarProperty Name="EmpID" ColumnName="EmpID" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Contact" ColumnName="Contact" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="DOB" ColumnName="DOB" />
+                <ScalarProperty Name="Gender" ColumnName="Gender" />
+                <ScalarProperty Name="Designation" ColumnName="Designation" />
+                <ScalarProperty Name="DOJ" ColumnName="DOJ" />
+                <ScalarProperty Name="Alloted_Leaves" ColumnName="Alloted_Leaves" />
+                <ScalarProperty Name="AllotedProjectID" ColumnName="AllotedProjectID" />
+                <ScalarProperty Name="Remaining_leaves" ColumnName="Remaining_leaves" />
+                <ScalarProperty Name="EUsername" ColumnName="EUsername" />
+                <ScalarProperty Name="Epassword" ColumnName="Epassword" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Leaves">
+            <EntityTypeMapping TypeName="Sprint_dbModel.Leaf">
+              <MappingFragment StoreEntitySet="Leaves">
+                <ScalarProperty Name="EmpID" ColumnName="EmpID" />
+                <ScalarProperty Name="LeaveID" ColumnName="LeaveID" />
+                <ScalarProperty Name="Reason" ColumnName="Reason" />
+                <ScalarProperty Name="IsApproved" ColumnName="IsApproved" />
+                <ScalarProperty Name="DateFrom" ColumnName="DateFrom" />
+                <ScalarProperty Name="DateTo" ColumnName="DateTo" />
+                <ScalarProperty Name="status" ColumnName="status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Projects">
+            <EntityTypeMapping TypeName="Sprint_dbModel.Project">
+              <MappingFragment StoreEntitySet="Project">
+                <ScalarProperty Name="ProjectId" ColumnName="ProjectId" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="prcEmployeeUpdate" FunctionName="Sprint_dbModel.Store.prcEmployeeUpdate" />
+          <FunctionImportMapping FunctionImportName="procAddAdmin" FunctionName="Sprint_dbModel.Store.procAddAdmin" />
+          <FunctionImportMapping FunctionImportName="procAddAttendance" FunctionName="Sprint_dbModel.Store.procAddAttendance" />
+          <FunctionImportMapping FunctionImportName="procAddEmployee" FunctionName="Sprint_dbModel.Store.procAddEmployee" />
+          <FunctionImportMapping FunctionImportName="procAddLeave" FunctionName="Sprint_dbModel.Store.procAddLeave" />
+          <FunctionImportMapping FunctionImportName="procAddProject" FunctionName="Sprint_dbModel.Store.procAddProject" />
+          <FunctionImportMapping FunctionImportName="procAllReadLeave" FunctionName="Sprint_dbModel.Store.procAllReadLeave">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Sprint_dbModel.procAllReadLeave_Result">
+                <ScalarProperty Name="EmpID" ColumnName="EmpID" />
+                <ScalarProperty Name="LeaveID" ColumnName="LeaveID" />
+                <ScalarProperty Name="Reason" ColumnName="Reason" />
+                <ScalarProperty Name="IsApproved" ColumnName="IsApproved" />
+                <ScalarProperty Name="DateFrom" ColumnName="DateFrom" />
+                <ScalarProperty Name="DateTo" ColumnName="DateTo" />
+                <ScalarProperty Name="status" ColumnName="status" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="procApproveAttendanceRequest" FunctionName="Sprint_dbModel.Store.procApproveAttendanceRequest" />
+          <FunctionImportMapping FunctionImportName="procApproveLeave" FunctionName="Sprint_dbModel.Store.procApproveLeave" />
+          <FunctionImportMapping FunctionImportName="procAssignProject" FunctionName="Sprint_dbModel.Store.procAssignProject" />
+          <FunctionImportMapping FunctionImportName="procDeleteAdmin" FunctionName="Sprint_dbModel.Store.procDeleteAdmin" />
+          <FunctionImportMapping FunctionImportName="procDeleteAttendanceRequest" FunctionName="Sprint_dbModel.Store.procDeleteAttendanceRequest" />
+          <FunctionImportMapping FunctionImportName="procDeleteAttendence" FunctionName="Sprint_dbModel.Store.procDeleteAttendence" />
+          <FunctionImportMapping FunctionImportName="procDeleteEmployee" FunctionName="Sprint_dbModel.Store.procDeleteEmployee" />
+          <FunctionImportMapping FunctionImportName="procDeleteProject" FunctionName="Sprint_dbModel.Store.procDeleteProject" />
+          <FunctionImportMapping FunctionImportName="procGenerateAttendanceRequest" FunctionName="Sprint_dbModel.Store.procGenerateAttendanceRequest" />
+          <FunctionImportMapping FunctionImportName="procLoginAdmin" FunctionName="Sprint_dbModel.Store.procLoginAdmin">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Sprint_dbModel.procLoginAdmin_Result">
+                <ScalarProperty Name="AdminID" ColumnName="AdminID" />
+                <ScalarProperty Name="Admin_Name" ColumnName="Admin_Name" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Contact" ColumnName="Contact" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="DOB" ColumnName="DOB" />
+                <ScalarProperty Name="Gender" ColumnName="Gender" />
+                <ScalarProperty Name="Designation" ColumnName="Designation" />
+                <ScalarProperty Name="DOJ" ColumnName="DOJ" />
+                <ScalarProperty Name="AUsername" ColumnName="AUsername" />
+                <ScalarProperty Name="Apassword" ColumnName="Apassword" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="procLoginEmployee" FunctionName="Sprint_dbModel.Store.procLoginEmployee">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Sprint_dbModel.procLoginEmployee_Result">
+                <ScalarProperty Name="EmpID" ColumnName="EmpID" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Contact" ColumnName="Contact" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="DOB" ColumnName="DOB" />
+                <ScalarProperty Name="Gender" ColumnName="Gender" />
+                <ScalarProperty Name="Designation" ColumnName="Designation" />
+                <ScalarProperty Name="DOJ" ColumnName="DOJ" />
+                <ScalarProperty Name="Alloted_Leaves" ColumnName="Alloted_Leaves" />
+                <ScalarProperty Name="AllotedProjectID" ColumnName="AllotedProjectID" />
+                <ScalarProperty Name="Remaining_leaves" ColumnName="Remaining_leaves" />
+                <ScalarProperty Name="EUsername" ColumnName="EUsername" />
+                <ScalarProperty Name="Epassword" ColumnName="Epassword" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="procReadAdminById" FunctionName="Sprint_dbModel.Store.procReadAdminById">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Sprint_dbModel.procReadAdminById_Result">
+                <ScalarProperty Name="AdminID" ColumnName="AdminID" />
+                <ScalarProperty Name="Admin_Name" ColumnName="Admin_Name" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Contact" ColumnName="Contact" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="DOB" ColumnName="DOB" />
+                <ScalarProperty Name="Gender" ColumnName="Gender" />
+                <ScalarProperty Name="Designation" ColumnName="Designation" />
+                <ScalarProperty Name="DOJ" ColumnName="DOJ" />
+                <ScalarProperty Name="AUsername" ColumnName="AUsername" />
+                <ScalarProperty Name="Apassword" ColumnName="Apassword" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="procReadAllAdmin" FunctionName="Sprint_dbModel.Store.procReadAllAdmin">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Sprint_dbModel.procReadAllAdmin_Result">
+                <ScalarProperty Name="AdminID" ColumnName="AdminID" />
+                <ScalarProperty Name="Admin_Name" ColumnName="Admin_Name" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Contact" ColumnName="Contact" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="DOB" ColumnName="DOB" />
+                <ScalarProperty Name="Gender" ColumnName="Gender" />
+                <ScalarProperty Name="Designation" ColumnName="Designation" />
+                <ScalarProperty Name="DOJ" ColumnName="DOJ" />
+                <ScalarProperty Name="AUsername" ColumnName="AUsername" />
+                <ScalarProperty Name="Apassword" ColumnName="Apassword" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="procReadAllProject" FunctionName="Sprint_dbModel.Store.procReadAllProject">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Sprint_dbModel.procReadAllProject_Result">
+                <ScalarProperty Name="ProjectId" ColumnName="ProjectId" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="procReadLeave" FunctionName="Sprint_dbModel.Store.procReadLeave">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Sprint_dbModel.procReadLeave_Result">
+                <ScalarProperty Name="EmpID" ColumnName="EmpID" />
+                <ScalarProperty Name="LeaveID" ColumnName="LeaveID" />
+                <ScalarProperty Name="Reason" ColumnName="Reason" />
+                <ScalarProperty Name="IsApproved" ColumnName="IsApproved" />
+                <ScalarProperty Name="DateFrom" ColumnName="DateFrom" />
+                <ScalarProperty Name="DateTo" ColumnName="DateTo" />
+                <ScalarProperty Name="status" ColumnName="status" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="procReadProject" FunctionName="Sprint_dbModel.Store.procReadProject">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Sprint_dbModel.procReadProject_Result">
+                <ScalarProperty Name="ProjectId" ColumnName="ProjectId" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="procRejectAttendanceRequest" FunctionName="Sprint_dbModel.Store.procRejectAttendanceRequest" />
+          <FunctionImportMapping FunctionImportName="procRejectLeave" FunctionName="Sprint_dbModel.Store.procRejectLeave" />
+          <FunctionImportMapping FunctionImportName="procRetriveAllEmployee" FunctionName="Sprint_dbModel.Store.procRetriveAllEmployee">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Sprint_dbModel.procRetriveAllEmployee_Result">
+                <ScalarProperty Name="EmpID" ColumnName="EmpID" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Contact" ColumnName="Contact" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="DOB" ColumnName="DOB" />
+                <ScalarProperty Name="Gender" ColumnName="Gender" />
+                <ScalarProperty Name="Designation" ColumnName="Designation" />
+                <ScalarProperty Name="DOJ" ColumnName="DOJ" />
+                <ScalarProperty Name="Alloted_Leaves" ColumnName="Alloted_Leaves" />
+                <ScalarProperty Name="AllotedProjectID" ColumnName="AllotedProjectID" />
+                <ScalarProperty Name="Remaining_leaves" ColumnName="Remaining_leaves" />
+                <ScalarProperty Name="EUsername" ColumnName="EUsername" />
+                <ScalarProperty Name="Epassword" ColumnName="Epassword" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="procRetriveEmployee" FunctionName="Sprint_dbModel.Store.procRetriveEmployee">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Sprint_dbModel.procRetriveEmployee_Result">
+                <ScalarProperty Name="EmpID" ColumnName="EmpID" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Contact" ColumnName="Contact" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="DOB" ColumnName="DOB" />
+                <ScalarProperty Name="Gender" ColumnName="Gender" />
+                <ScalarProperty Name="Designation" ColumnName="Designation" />
+                <ScalarProperty Name="DOJ" ColumnName="DOJ" />
+                <ScalarProperty Name="Alloted_Leaves" ColumnName="Alloted_Leaves" />
+                <ScalarProperty Name="AllotedProjectID" ColumnName="AllotedProjectID" />
+                <ScalarProperty Name="Remaining_leaves" ColumnName="Remaining_leaves" />
+                <ScalarProperty Name="EUsername" ColumnName="EUsername" />
+                <ScalarProperty Name="Epassword" ColumnName="Epassword" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="procShowPendingRequest" FunctionName="Sprint_dbModel.Store.procShowPendingRequest">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Sprint_dbModel.procShowPendingRequest_Result">
+                <ScalarProperty Name="AttReqID" ColumnName="AttReqID" />
+                <ScalarProperty Name="EmpID" ColumnName="EmpID" />
+                <ScalarProperty Name="ReqDate" ColumnName="ReqDate" />
+                <ScalarProperty Name="isApproved" ColumnName="isApproved" />
+                <ScalarProperty Name="ReqStatus" ColumnName="ReqStatus" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="procUpdateAdminById" FunctionName="Sprint_dbModel.Store.procUpdateAdminById" />
+          <FunctionImportMapping FunctionImportName="procUpdateAttendance" FunctionName="Sprint_dbModel.Store.procUpdateAttendance" />
+          <FunctionImportMapping FunctionImportName="procUpdateAttendanceRequest" FunctionName="Sprint_dbModel.Store.procUpdateAttendanceRequest" />
+          <FunctionImportMapping FunctionImportName="procUpdateLeave" FunctionName="Sprint_dbModel.Store.procUpdateLeave" />
+          <FunctionImportMapping FunctionImportName="procupdateProject" FunctionName="Sprint_dbModel.Store.procupdateProject" />
+          <FunctionImportMapping FunctionImportName="procViewPendingLeaveRequests" FunctionName="Sprint_dbModel.Store.procViewPendingLeaveRequests">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Sprint_dbModel.procViewPendingLeaveRequests_Result">
+                <ScalarProperty Name="LeaveID" ColumnName="LeaveID" />
+                <ScalarProperty Name="DateFrom" ColumnName="DateFrom" />
+                <ScalarProperty Name="DateTo" ColumnName="DateTo" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="IsApproved" ColumnName="IsApproved" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="Remaining_leaves" ColumnName="Remaining_leaves" />
+                <ScalarProperty Name="Alloted_Leaves" ColumnName="Alloted_Leaves" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="procupdateProject1" FunctionName="Sprint_dbModel.Store.procupdateProject" />
+          <FunctionImportMapping FunctionImportName="procReadProject1" FunctionName="Sprint_dbModel.Store.procReadProject" />
+          <FunctionImportMapping FunctionImportName="procReadAllProject1" FunctionName="Sprint_dbModel.Store.procReadAllProject" />
+          <FunctionImportMapping FunctionImportName="procDeleteProject1" FunctionName="Sprint_dbModel.Store.procDeleteProject" />
+          <FunctionImportMapping FunctionImportName="procAddProject1" FunctionName="Sprint_dbModel.Store.procAddProject" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

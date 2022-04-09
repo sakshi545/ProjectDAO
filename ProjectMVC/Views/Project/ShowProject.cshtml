@@ -1,0 +1,57 @@
+﻿@model IEnumerable<ProjectDAO.Project>
+@{
+    ViewBag.Title = "ShowProject";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>ShowProject</h2>
+
+<p>
+    @Html.ActionLink("Add New Project", "Create")
+</p>
+
+<p>
+    @Html.ActionLink("Assign Project", "Assign")
+</p>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.ProjectId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Title)
+
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Status)
+        </th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProjectId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+
+            <td>
+
+                @Html.ActionLink("Update Details", "Update", new { /*id=item.PrimaryKey*/})|
+
+                @Html.ActionLink("Delete Project", "Delete", new { /*id=item.PrimaryKey*/})
+            </td>
+        </tr>
+    }
+
+
+</table>
+
+
+
+
