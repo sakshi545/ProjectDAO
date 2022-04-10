@@ -637,5 +637,31 @@ namespace ProjectDAO
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Project>("procAddProject1", mergeOption, titleParameter);
         }
+    
+        public virtual ObjectResult<Admin> procAssignProject1(Nullable<int> empId, Nullable<int> projectId)
+        {
+            var empIdParameter = empId.HasValue ?
+                new ObjectParameter("EmpId", empId) :
+                new ObjectParameter("EmpId", typeof(int));
+    
+            var projectIdParameter = projectId.HasValue ?
+                new ObjectParameter("ProjectId", projectId) :
+                new ObjectParameter("ProjectId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Admin>("procAssignProject1", empIdParameter, projectIdParameter);
+        }
+    
+        public virtual ObjectResult<Admin> procAssignProject1(Nullable<int> empId, Nullable<int> projectId, MergeOption mergeOption)
+        {
+            var empIdParameter = empId.HasValue ?
+                new ObjectParameter("EmpId", empId) :
+                new ObjectParameter("EmpId", typeof(int));
+    
+            var projectIdParameter = projectId.HasValue ?
+                new ObjectParameter("ProjectId", projectId) :
+                new ObjectParameter("ProjectId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Admin>("procAssignProject1", mergeOption, empIdParameter, projectIdParameter);
+        }
     }
 }

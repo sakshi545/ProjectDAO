@@ -39,6 +39,11 @@ namespace ProjectDAO
             int result = entities.procupdateProject(ProjectId, Title);
             return result;
         }
+        public void AssignProject(int empid, int projectid)
+        {
+            entities.procAssignProject(empid, projectid);
+        }
+       
 
 
     }

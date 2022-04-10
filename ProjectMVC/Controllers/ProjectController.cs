@@ -9,6 +9,8 @@ using Newtonsoft.Json;
 using System.Net.Http;
 using System.Data;
 using ProjectMVC.UtilFunctions;
+using System.Threading.Tasks;
+using ProjectMVC.Models;
 
 namespace ProjectMVC.Controllers
 {
@@ -22,6 +24,7 @@ namespace ProjectMVC.Controllers
                 return View();
             }
             return Redirect("/Login/Login");
+
 
         }
 
@@ -44,6 +47,8 @@ namespace ProjectMVC.Controllers
                 ProejctList.Add(project);
             }
             return View(ProejctList);
+
+            
         }
 
         //Add :Project
@@ -51,19 +56,114 @@ namespace ProjectMVC.Controllers
         
         [HttpPost]
 
-        public ActionResult Create(Project project)
+        public async Task<ActionResult> Create(Project project)
         {
             var client = new HttpClient();
-            string url = "https://localhost:44372/api/Home/AddProject/" + project.Title;
+            string url = $"https://localhost:44372/api/Home/AddProject/" + project.Title;
 
             var response = client.PostAsync(url, null);
-            return RedirectToAction("ShowProject");
+            response.Wait();
 
+
+           
+                TempData["error"] = false;
+                TempData["message"] = "Project created";
+            
+            return RedirectToAction("ShowProject");
         }
         public ActionResult Create()
         {
             return View();
         }
 
+        //Delete Project
+        
+        public ActionResult DeleteView()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<ActionResult> DeleteView(Project project)
+        {
+            var client = new HttpClient();
+            string url = $"https://localhost:44372/api/Home/DeleteProjectSp/{project.ProjectId}";
+            TempData["id"] = project.ProjectId;
+            var response = await client.GetAsync(url);
+            
+
+            if (((int)response.StatusCode)==200)
+            {
+                TempData["error"] = false;
+                TempData["message"] = "Project deleted";
+            }
+            else
+            {
+                TempData["error"] = true;
+                TempData["message"] = "Project not deleted";
+            }
+            
+            return Redirect("ShowProject");
+        }
+
+        
+            
+        
+         
+        //Update Project
+        [HttpPost]
+        public async Task<ActionResult> UpdateProject(int projectId,string Title)
+        {
+           
+            var client = new HttpClient();
+            string url = $"https://localhost:44372/api/Home/UpdateProjectSp/"+projectId+","+Title;
+            var response = await client.PutAsync(url,null);
+           
+            if (((int)response.StatusCode) == 200)
+            {
+                TempData["error"] = false;
+                TempData["message"] = "Project Updated Successfully";
+            }
+            else
+            {
+                TempData["error"] = true;
+                TempData["message"] = "Project not updated";
+            }
+            return RedirectToAction("ShowProject");
+        }
+        public ActionResult UpdateView()
+        {
+            return View();
+        }
+
+        //Assign Project
+        [HttpPost]
+        public async Task<ActionResult> AssignProject(int empid,int pid)
+        {
+            var client = new HttpClient();
+            string url = $"https://localhost:44372/api/Home/AssignProject/"+empid+","+pid;           
+
+            var response = await client.GetAsync(url);
+            if (((int)response.StatusCode) == 200)
+            {
+                TempData["error"] = false;
+                TempData["message"] = "Project Assigned ";
+            }
+            else
+            {
+                TempData["error"] = true;
+                TempData["message"] = "Employee or Project Not Found";
+            }
+
+            return RedirectToAction("ShowProject");
+
+        }
+        public ActionResult Assign()
+        {
+            return View();
+        }
+
+
+
     }
+
 }

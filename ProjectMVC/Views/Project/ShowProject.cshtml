@@ -14,12 +14,21 @@
     @Html.ActionLink("Assign Project", "Assign")
 </p>
 
+<p>
+    @Html.ActionLink("Delete Project", "DeleteView")
+</p>
+
+<p>
+    @Html.ActionLink("Update Details", "UpdateView")
+</p>
+
 <table class="table">
     <tr>
         <th>
             @Html.DisplayNameFor(model => model.ProjectId)
         </th>
         <th>
+
             @Html.DisplayNameFor(model => model.Title)
 
         </th>
@@ -40,18 +49,27 @@
                 @Html.DisplayFor(modelItem => item.Status)
             </td>
 
-            <td>
-
-                @Html.ActionLink("Update Details", "Update", new { /*id=item.PrimaryKey*/})|
-
-                @Html.ActionLink("Delete Project", "Delete", new { /*id=item.PrimaryKey*/})
-            </td>
+            
         </tr>
     }
 
 
 </table>
+@{
+    string alert = TempData["message"] != null ? TempData["message"].ToString() : "";
+    string error = TempData["error"] != null ? TempData["error"].ToString() : "";
+}
 
+<script>
+    if('@alert'!= null && '@alert' != "" && '@error' == 'False')
+    {
+        toastr.success('@alert', '');
+    }
+    else if('@error' == 'True')
+    {
+        toastr.error('@alert', '');
+    }
+</script>
 
 
 

@@ -5,7 +5,7 @@ using System.Net;
 using System.Web;
 using System.Web.Http;
 using System.Web.Http.Description;
-//using System.Data.Entity.Core.Objects;
+using System.Data.Entity.Core.Objects;
 using System.Text;
 using ProjectDAO;
 using System.Net.Http;
@@ -81,7 +81,7 @@ namespace ProjectApi.Controllers
         }
 
         [HttpPut]
-        [Route("api/Home/UpdateProjectSp")]
+        [Route("api/Home/UpdateProjectSp/{projectId},{Title}")]
         [ResponseType(typeof(Project))]
 
         public IHttpActionResult UpdateProjectSp(int projectId, string Title)
@@ -103,6 +103,25 @@ namespace ProjectApi.Controllers
 
         }
 
+        [HttpGet]
+        [Route("api/Home/AssignProject/{empid},{projectid}")]
+        [ResponseType(typeof(Employee))]
+
+        public IHttpActionResult AssignProject(int empid, int projectid)
+        {
+            Sprint_dbEntities1 db = new Sprint_dbEntities1();
+            ProjectDAL dao = new ProjectDAL();
+            Employee emp = db.Employees.Find(empid);
+            Project prj = db.Projects.Find(projectid);
+            if (emp == null || prj == null)
+            {
+                return NotFound();
+            }
+            dao.AssignProject(empid, projectid);
+            var response = this.Request.CreateResponse(HttpStatusCode.OK);
+            response.Content = new StringContent("Project Assigned ....", Encoding.UTF8, "application/json");
+            return ResponseMessage(response);
+        }
 
     }
 }

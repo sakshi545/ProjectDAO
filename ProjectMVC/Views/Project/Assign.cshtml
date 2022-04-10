@@ -1,0 +1,92 @@
+﻿@{
+    ViewBag.Title = "Assign";
+}
+
+
+@section Styles{
+    <style>
+        input {
+            width: 100%;
+        }
+
+        .form-select {
+            display: block;
+            width: 100%;
+            height: 34px;
+            padding: 0.375rem 2.25rem 0.375rem 0.75rem;
+            -moz-padding-start: calc(0.75rem - 3px);
+            font-size: 1.5rem;
+            font-weight: 400;
+            line-height: 1.5;
+            color: #212529;
+            background-color: #fff;
+            background-image: url(data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e);
+            background-repeat: no-repeat;
+            background-position: right 0.75rem center;
+            background-size: 16px 12px;
+            border: 1px solid #ced4da;
+            border-radius: 0.25rem;
+            transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+        }
+
+        .login-container {
+            width: 40%;
+            padding: 15px;
+            padding-bottom: 25px;
+            border-radius: 10px;
+            box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
+        }
+
+        .main-container, form {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .main-container {
+            width: 100%;
+            height: 100%;
+        }
+
+        form {
+            flex-direction: column
+        }
+
+        .margin {
+            margin-top: 10px;
+        }
+
+        button {
+            display: block;
+            width: 70%;
+        }
+
+        .form-input {
+            width: 100%;
+        }
+    </style>
+}
+
+
+
+<div class="main-container">
+    <div class="login-container">
+        <h2>Assign</h2>
+        <form action="~/Project/AssignProject" method="post">
+            <div class="mb-3 form-input">
+                <label for="exampleInputEmpId" class="form-label margin">Enter Employe Id</label>
+                <input type="text" class="form-control" name="empid" id="exampleInputEmpId" aria-describedby="empid">
+            </div>
+
+            <div class="mb-3 form-input">
+                <label for="exampleProjectId" class="form-label margin">Enter Project Id</label>
+                <input type="text" name="pid" class="form-control" id="exampleProjectId">
+            </div>
+            <button type="submit" class="btn btn-primary margin">Assign</button>
+
+        </form>
+    </div>
+</div>
